@@ -5,7 +5,6 @@ export async function autoSeedDatabaseIfNeeded() {
   try {
     // 1. Seed Categories if empty
     const { data: existingCats } = await supabase.from("categories").select("id").limit(1);
-    
     if (!existingCats || existingCats.length === 0) {
       console.log("Seeding initial comprehensive categories...");
       for (const parentCat of COMPREHENSIVE_CATEGORIES) {
@@ -46,7 +45,6 @@ export async function autoSeedDatabaseIfNeeded() {
 
     // 2. Seed Products if empty
     const { data: existingProds } = await supabase.from("products").select("id").limit(1);
-
     if (!existingProds || existingProds.length === 0) {
       console.log("Seeding initial mock products into Supabase...");
       const prodPayloads = MOCK_PRODUCTS.map((p) => ({
@@ -54,15 +52,12 @@ export async function autoSeedDatabaseIfNeeded() {
         name: p.name,
         description: p.description || null,
         category_id: p.category_id || null,
-        price_per_unit: p.price_per_unit,
-        old_price: p.old_price || null,
+        price: p.price_per_unit,
+        original_price: p.old_price || null,
         image_url: p.image_url || null,
-        unit_label: p.unit_label || "قطعة",
-        is_by_weight: !!p.is_by_weight,
-        stock_quantity: p.stock_quantity ?? 100,
-        is_popular: true,
-        is_on_sale: !!p.old_price,
+        stock: p.stock_quantity ?? 100,
         is_featured: true,
+        is_active: true,
       }));
 
       const { error: prodErr } = await supabase.from("products").upsert(prodPayloads);
@@ -71,6 +66,5 @@ export async function autoSeedDatabaseIfNeeded() {
       }
     }
   } catch (err) {
-    console.error("Auto-seed error:", err);
-  }
+    console.error("Auto-seed error:", err)d
 }
