@@ -66,5 +66,5 @@ export async function autoSeedDatabaseIfNeeded() {
       }
     }
   } catch (err) {
-    console.error("Auto-seed error:", err)d
+    console.error("Auto-seed error:", err);
 }
